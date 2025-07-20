@@ -12,7 +12,7 @@ interface UserAttributes {
   lastLogin?: Date;
   createdAt?: Date;
   updatedAt?: Date;
-  role: "user" | "admin"; // <-- thêm role
+  role: "user" | "admin";
 }
 
 interface UserCreationAttributes

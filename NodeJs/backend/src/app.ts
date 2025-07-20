@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import sequelize from "./config/database";
 import authRoutes from "./routes/authRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 import User from "./models/User";
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/category", categoryRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -74,6 +76,9 @@ const startServer = async () => {
       console.log(`🚀 Server is running on port ${PORT}`);
       console.log(`📍 Health check: http://localhost:${PORT}/health`);
       console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+      console.log(
+        `📂 Category endpoints: http://localhost:${PORT}/api/category`
+      );
     });
   } catch (error) {
     console.error("❌ Unable to start server:", error);
