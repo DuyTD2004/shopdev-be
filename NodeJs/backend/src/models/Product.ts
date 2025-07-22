@@ -8,7 +8,9 @@ interface ProductAttributes {
   price: number;
   stock: number;
   imageUrl?: string;
-  category?: string;
+  categoryId?: number;
+  brandId?: number;
+  isActive?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -16,7 +18,14 @@ interface ProductAttributes {
 interface ProductCreationAttributes
   extends Optional<
     ProductAttributes,
-    "id" | "description" | "imageUrl" | "category" | "createdAt" | "updatedAt"
+    | "id"
+    | "description"
+    | "imageUrl"
+    | "categoryId"
+    | "brandId"
+    | "isActive"
+    | "createdAt"
+    | "updatedAt"
   > {}
 
 class Product
@@ -29,7 +38,9 @@ class Product
   public price!: number;
   public stock!: number;
   public imageUrl?: string;
-  public category?: string;
+  public categoryId?: number;
+  public brandId?: number;
+  public isActive?: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -65,9 +76,30 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    category: {
-      type: DataTypes.STRING(100),
+    categoryId: {
+      type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: "categories",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
+    brandId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "brands",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

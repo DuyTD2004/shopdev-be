@@ -5,8 +5,11 @@ import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import sequelize from "./config/database";
 import authRoutes from "./routes/authRoutes";
-import categoryRoutes from "./routes/categoryRoutes";
+import routerCategory from "./routes/categoryRoutes";
+import routerProduct from "./routes/productRoutes";
 import User from "./models/User";
+import routerBrand from "./routes/brandRoutes";
+import { applyAssociations } from "./models/associations";
 
 dotenv.config();
 
@@ -30,7 +33,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/category", categoryRoutes);
+app.use("/api/category", routerCategory);
+app.use("/api/product", routerProduct);
+app.use("/api/brand", routerBrand);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -67,6 +72,9 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
 
+    // Gọi thiết lập quan hệ
+    applyAssociations();
+
     // Sync models (creates tables if they don't exist)
     await sequelize.sync({ alter: process.env.NODE_ENV === "development" });
     console.log("✅ Database synchronized.");
@@ -79,6 +87,7 @@ const startServer = async () => {
       console.log(
         `📂 Category endpoints: http://localhost:${PORT}/api/category`
       );
+      console.log(`🛒 Product endpoints: http://localhost:${PORT}/api/product`);
     });
   } catch (error) {
     console.error("❌ Unable to start server:", error);

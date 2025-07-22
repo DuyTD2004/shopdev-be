@@ -9,10 +9,10 @@ import validate from "../middlewares/validate";
 import auth from "../middlewares/auth";
 import { isAdmin } from "../middlewares/checkRole";
 
-const router = Router();
+const routerCategory = Router();
 
 // Tạo danh mục mới
-router.post(
+routerCategory.post(
   "/admin/create-category",
   createCategoryValidator,
   auth,
@@ -21,10 +21,10 @@ router.post(
 );
 
 // Lấy tất cả danh mục
-router.get("/list", CategoryController.getAllCategories);
+routerCategory.get("/list", CategoryController.getAllCategories);
 
 // Lấy danh mục theo ID
-router.get(
+routerCategory.get(
   "/details/:id",
   idParamValidator,
   auth,
@@ -32,7 +32,7 @@ router.get(
 );
 
 // Cập nhật danh mục
-router.put(
+routerCategory.put(
   "/admin/update-category/:id",
   updateCategoryValidator,
   auth,
@@ -41,7 +41,7 @@ router.put(
 );
 
 // Xoá danh mục
-router.delete(
+routerCategory.delete(
   "/admin/delete-category/:id",
   idParamValidator,
   auth,
@@ -49,4 +49,4 @@ router.delete(
   CategoryController.deleteCategory
 );
 
-export default router;
+export default routerCategory;
