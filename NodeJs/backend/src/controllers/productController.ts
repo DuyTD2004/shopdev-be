@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Brand from "../models/Brand";
 import Category from "../models/Category";
 import Product from "../models/Product";
+import ProductSize from "../models/ProductSize";
 
 class ProductController {
   // Lấy danh sách tất cả sản phẩm
@@ -14,7 +15,6 @@ class ProductController {
       if (isActive !== undefined) {
         whereClause.isActive = isActive === "true";
       }
-      console.log("1");
 
       const products = await Product.findAll({
         where: whereClause,
@@ -63,6 +63,11 @@ class ProductController {
             as: "brand",
             attributes: ["id", "name"], // Lấy id và tên thương hiệu
           },
+		  {
+			model: ProductSize,
+			as: "product_sizes",
+			attributes: ["id", "size", "stock"] 
+		  }
         ],
       });
       if (!product) {

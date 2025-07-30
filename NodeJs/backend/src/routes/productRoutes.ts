@@ -5,7 +5,6 @@ import {
   updateProductValidator,
   idParamValidator,
 } from "../validators/productValidator";
-import validate from "../middlewares/validate";
 import auth from "../middlewares/auth";
 import { isAdmin } from "../middlewares/checkRole";
 

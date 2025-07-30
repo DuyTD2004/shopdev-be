@@ -10,6 +10,7 @@ import routerProduct from "./routes/productRoutes";
 import User from "./models/User";
 import routerBrand from "./routes/brandRoutes";
 import { applyAssociations } from "./models/associations";
+import routerProductSize from "./routes/productSizeRoutes";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/category", routerCategory);
 app.use("/api/product", routerProduct);
 app.use("/api/brand", routerBrand);
+app.use("/api/product-size", routerProductSize);
 
 // Health check
 app.get("/health", (req, res) => {

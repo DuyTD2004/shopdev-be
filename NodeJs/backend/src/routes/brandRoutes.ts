@@ -5,7 +5,6 @@ import {
   updateBrandValidator,
   idParamValidator,
 } from "../validators/brandValidator";
-import validate from "../middlewares/validate";
 import auth from "../middlewares/auth";
 import { isAdmin } from "../middlewares/checkRole";
 
@@ -17,7 +16,6 @@ routerBrand.post(
   createBrandValidator,
   auth,
   isAdmin,
-  validate,
   BrandController.createBrand
 );
 
@@ -29,7 +27,6 @@ routerBrand.get(
   "/details/:id",
   idParamValidator,
   auth,
-  validate,
   BrandController.getBrandById
 );
 
@@ -39,7 +36,6 @@ routerBrand.put(
   updateBrandValidator,
   auth,
   isAdmin,
-  validate,
   BrandController.updateBrand
 );
 
@@ -49,7 +45,6 @@ routerBrand.delete(
   idParamValidator,
   auth,
   isAdmin,
-  validate,
   BrandController.deleteBrand
 );
 
