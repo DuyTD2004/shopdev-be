@@ -128,6 +128,8 @@ class AuthController {
           lastName: user.lastName,
           fullName: user.fullName,
           lastLogin: user.lastLogin,
+		  role: user.role,
+		  avatar: "https://raw.githubusercontent.com/duytd34/shopdev/refs/heads/main/NodeJs/backend/src/assets/image/iphone11.png"
         },
       });
     } catch (error: any) {
