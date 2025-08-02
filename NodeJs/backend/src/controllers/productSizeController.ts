@@ -50,7 +50,8 @@ class ProductSizeController {
       });
 
       if (existingSize) {
-        res.status(500).json({ message: "Sản phẩm đã tồn tại size này!" });
+        res.status(400).json({ message: "Sản phẩm đã tồn tại size này!" });
+        return;
       }
 
       const newSize = await ProductSize.create({ productId, size, stock });
