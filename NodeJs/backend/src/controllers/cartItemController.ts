@@ -79,9 +79,24 @@ class CartItemController {
       if (existingItem) {
         existingItem.quantity += quantity;
         await existingItem.save();
+		const updatedItem = await CartItem.findOne({
+			where: { id: existingItem.id },
+			include: [
+			  {
+				model: ProductSize,
+				as: "productSize",
+				include: [
+				  {
+					model: Product,
+					as: "products",
+				  },
+				],
+			  },
+			],
+		  });
         res.json({
           message: "Cập nhật số lượng sản phẩm trong giỏ hàng.",
-          cartItem: existingItem,
+          cartItem: updatedItem,
         });
       } else {
         const newItem = await CartItem.create({
@@ -89,10 +104,24 @@ class CartItemController {
           productSizeId,
           quantity,
         });
-
-        res.status(201).json({
-          message: "Thêm sản phẩm vào giỏ hàng thành công.",
-          cartItem: newItem,
+		const updatedItem = await CartItem.findOne({
+			where: { id: newItem.id },
+			include: [
+			  {
+				model: ProductSize,
+				as: "productSize",
+				include: [
+				  {
+					model: Product,
+					as: "products",
+				  },
+				],
+			  },
+			],
+		  });
+        res.json({
+			message: "Thêm sản phẩm vào giỏ hàng thành công.",
+			cartItem: updatedItem,
         });
       }
     } catch (error) {
