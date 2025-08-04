@@ -8,12 +8,19 @@ class ProductController {
   // Lấy danh sách tất cả sản phẩm
   public async getAllProducts(req: Request, res: Response): Promise<void> {
     try {
-      const { isActive } = req.query;
-      console.log(0);
+      const { isActive, categoryId, brandId } = req.query;
 
       const whereClause: any = {};
       if (isActive !== undefined) {
         whereClause.isActive = isActive === "true";
+      }
+
+      if (categoryId !== undefined) {
+        whereClause.categoryId = Number(categoryId);
+      }
+
+      if (brandId !== undefined) {
+        whereClause.brandId = Number(brandId);
       }
 
       const products = await Product.findAll({
@@ -29,9 +36,13 @@ class ProductController {
             as: "brand",
             attributes: ["id", "name"], // Lấy id và tên thương hiệu
           },
+          {
+            model: ProductSize,
+            as: "product_sizes",
+            attributes: ["id", "size", "stock"],
+          },
         ],
       });
-      console.log(2);
 
       res.json({
         message: "Lấy danh sách sản phẩm thành công.",
@@ -63,11 +74,11 @@ class ProductController {
             as: "brand",
             attributes: ["id", "name"], // Lấy id và tên thương hiệu
           },
-		  {
-			model: ProductSize,
-			as: "product_sizes",
-			attributes: ["id", "size", "stock"] 
-		  }
+          {
+            model: ProductSize,
+            as: "product_sizes",
+            attributes: ["id", "size", "stock"],
+          },
         ],
       });
       if (!product) {

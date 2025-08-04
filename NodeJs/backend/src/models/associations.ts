@@ -24,4 +24,15 @@ export const applyAssociations = () => {
   // --- Cart & User ---
   Cart.belongsTo(User, { foreignKey: "userId", as: "user" });
   User.hasOne(Cart, { foreignKey: "userId", as: "cart" });
+
+  CartItem.belongsTo(ProductSize, {
+	foreignKey: "productSizeId",
+	as: "productSize",
+  });
+  
+  ProductSize.hasMany(CartItem, {
+	foreignKey: "productSizeId",
+	as: "cartItems",
+  });
+  
 };

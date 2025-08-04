@@ -83,7 +83,8 @@ const startServer = async () => {
     applyAssociations();
 
     // Sync models (creates tables if they don't exist)
-    await sequelize.sync({ alter: process.env.NODE_ENV === "development" });
+    await sequelize.sync();
+    // await sequelize.sync({ alter: process.env.NODE_ENV === "development" }); // nếu lỗi kết nối thì sử dụng
     console.log("✅ Database synchronized.");
 
     // Start server
