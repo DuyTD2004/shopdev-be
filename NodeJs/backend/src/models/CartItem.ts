@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/database";
+import ProductSize from "./ProductSize";
 
 interface CartItemAttributes {
   id: number;
@@ -19,6 +20,9 @@ class CartItem
   public cartId!: number;
   productSizeId!: number;
   public quantity!: number;
+  
+  // Association
+  public productSize?: ProductSize;
 }
 
 CartItem.init(

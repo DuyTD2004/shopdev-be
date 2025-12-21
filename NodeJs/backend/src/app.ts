@@ -13,6 +13,7 @@ import { applyAssociations } from "./models/associations";
 import routerProductSize from "./routes/productSizeRoutes";
 import routerCartItem from "./routes/cartItemRoutes";
 import routerCart from "./routes/cartRoutes";
+import orderRoutes from "./routes/orderRoutes";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use("/api/brand", routerBrand);
 app.use("/api/product-size", routerProductSize);
 app.use("/api/cart", routerCart);
 app.use("/api/cart-items", routerCartItem);
+app.use("/api", orderRoutes);
 
 
 // Health check
@@ -83,8 +85,8 @@ const startServer = async () => {
     applyAssociations();
 
     // Sync models (creates tables if they don't exist)
-    await sequelize.sync();
-    // await sequelize.sync({ alter: process.env.NODE_ENV === "development" }); // nếu lỗi kết nối thì sử dụng
+    // await sequelize.sync();
+    await sequelize.sync({ alter: true }); // Sử dụng alter để cập nhật cấu trúc bảng
     console.log("✅ Database synchronized.");
 
     // Start server

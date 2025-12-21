@@ -42,7 +42,7 @@ class Order
 Order.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -128,12 +128,12 @@ class OrderItem
 OrderItem.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
     orderId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: Order,
@@ -141,7 +141,7 @@ OrderItem.init(
       },
     },
     productId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: Product,
@@ -177,15 +177,5 @@ OrderItem.init(
     tableName: "order_items",
   }
 );
-
-// Associations
-Order.belongsTo(User, { foreignKey: "userId", as: "user" });
-User.hasMany(Order, { foreignKey: "userId", as: "orders" });
-
-Order.hasMany(OrderItem, { foreignKey: "orderId", as: "items" });
-OrderItem.belongsTo(Order, { foreignKey: "orderId", as: "order" });
-
-OrderItem.belongsTo(Product, { foreignKey: "productId", as: "product" });
-Product.hasMany(OrderItem, { foreignKey: "productId", as: "orderItems" });
 
 export { Order, OrderItem };
