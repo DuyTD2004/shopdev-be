@@ -3,23 +3,15 @@ import { body, param } from "express-validator";
 // Validator tạo mới CartItem
 export const createCartItemValidator = [
   body("cartId")
-    .notEmpty()
-    .withMessage("Cart ID không được để trống")
+    .optional()
     .isUUID()
     .withMessage("Cart ID không hợp lệ"),
 
-  body("productId")
+  body("productSizeId")
     .notEmpty()
-    .withMessage("Product ID không được để trống")
+    .withMessage("Product Size ID không được để trống")
     .isUUID()
-    .withMessage("Product ID không hợp lệ"),
-
-  body("size")
-    .notEmpty()
-    .withMessage("Kích cỡ không được để trống")
-    .isString()
-    .isLength({ max: 10 })
-    .withMessage("Kích cỡ không được vượt quá 10 ký tự"),
+    .withMessage("Product Size ID không hợp lệ"),
 
   body("quantity")
     .notEmpty()

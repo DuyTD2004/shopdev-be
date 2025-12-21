@@ -47,6 +47,7 @@ class CartItemController {
       if (cartId) {
         cart = await Cart.findByPk(cartId);
       }
+      console.log('=====CART ID======',cartId)           
 
       // Nếu không có hoặc không tìm thấy cart, tìm theo userId hoặc tạo mới
       if (!cart) {

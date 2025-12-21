@@ -11,6 +11,11 @@ interface ProductAttributes {
   categoryId?: number;
   brandId?: number;
   isActive?: boolean;
+  isOnSale?: boolean;
+  saleType?: 'FIXED' | 'PERCENTAGE';
+  saleValue?: number;
+  saleStartDate?: Date;
+  saleEndDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,6 +29,11 @@ interface ProductCreationAttributes
     | "categoryId"
     | "brandId"
     | "isActive"
+    | "isOnSale"
+    | "saleType"
+    | "saleValue"
+    | "saleStartDate"
+    | "saleEndDate"
     | "createdAt"
     | "updatedAt"
   > {}
@@ -41,8 +51,22 @@ class Product
   public categoryId?: number;
   public brandId?: number;
   public isActive?: boolean;
+  public isOnSale?: boolean;
+  public saleType?: 'FIXED' | 'PERCENTAGE';
+  public saleValue?: number;
+  public saleStartDate?: Date;
+  public saleEndDate?: Date;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public getFinalPrice(): number {
+    if (!this.isOnSale || !this.saleValue) return this.price;
+    
+    if (this.saleType === 'PERCENTAGE') {
+      return this.price * (1 - this.saleValue / 100);
+    }
+    return Math.max(0, this.price - this.saleValue);
+  }
 }
 
 Product.init(
@@ -100,6 +124,30 @@ Product.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+    },
+    isOnSale: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    saleType: {
+      type: DataTypes.ENUM('FIXED', 'PERCENTAGE'),
+      allowNull: true,
+    },
+    saleValue: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      validate: {
+        min: 0,
+      },
+    },
+    saleStartDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    saleEndDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

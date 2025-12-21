@@ -4,6 +4,7 @@ import {
   createProductValidator,
   updateProductValidator,
   idParamValidator,
+  setSaleValidator,
 } from "../validators/productValidator";
 import auth from "../middlewares/auth";
 import { isAdmin } from "../middlewares/checkRole";
@@ -47,6 +48,15 @@ routerProduct.delete(
   auth,
   isAdmin,
   ProductController.deleteProduct
+);
+
+// Thiết lập sale cho sản phẩm (Admin)
+routerProduct.put(
+  "/admin/set-sale/:id",
+  setSaleValidator,
+  auth,
+  isAdmin,
+  ProductController.setProductOnSale
 );
 
 export default routerProduct;

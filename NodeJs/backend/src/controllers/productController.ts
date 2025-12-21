@@ -159,6 +159,36 @@ class ProductController {
       res.status(500).json({ message: "Lỗi máy chủ khi xoá sản phẩm." });
     }
   }
+
+  // Set product on sale (Admin only)
+  public async setProductOnSale(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const { isOnSale, saleType, saleValue, saleStartDate, saleEndDate } = req.body;
+    
+    try {
+      const product = await Product.findByPk(id);
+      if (!product) {
+        res.status(404).json({ message: "Không tìm thấy sản phẩm." });
+        return;
+      }
+
+      await product.update({
+        isOnSale,
+        saleType,
+        saleValue,
+        saleStartDate: saleStartDate ? new Date(saleStartDate) : undefined,
+        saleEndDate: saleEndDate ? new Date(saleEndDate) : undefined,
+      });
+
+      res.json({ 
+        message: isOnSale ? "Thiết lập sale thành công." : "Hủy sale thành công.", 
+        product 
+      });
+    } catch (error) {
+      console.error("Lỗi khi thiết lập sale:", error);
+      res.status(500).json({ message: "Lỗi máy chủ khi thiết lập sale." });
+    }
+  }
 }
 
 export default new ProductController();

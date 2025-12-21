@@ -78,3 +78,31 @@ export const updateProductValidator = [
 export const idParamValidator = [
   param("id").isInt({ min: 1 }).withMessage("ID không hợp lệ"),
 ];
+
+export const setSaleValidator = [
+  param("id").isInt({ min: 1 }).withMessage("ID không hợp lệ"),
+  
+  body("isOnSale")
+    .isBoolean()
+    .withMessage("Trạng thái sale phải là true hoặc false"),
+
+  body("saleType")
+    .optional()
+    .isIn(['FIXED', 'PERCENTAGE'])
+    .withMessage("Loại sale phải là FIXED hoặc PERCENTAGE"),
+
+  body("saleValue")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Giá trị sale phải >= 0"),
+
+  body("saleStartDate")
+    .optional()
+    .isISO8601()
+    .withMessage("Ngày bắt đầu sale không hợp lệ"),
+
+  body("saleEndDate")
+    .optional()
+    .isISO8601()
+    .withMessage("Ngày kết thúc sale không hợp lệ"),
+];
