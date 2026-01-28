@@ -14,6 +14,7 @@ import routerProductSize from "./routes/productSizeRoutes";
 import routerCartItem from "./routes/cartItemRoutes";
 import routerCart from "./routes/cartRoutes";
 import orderRoutes from "./routes/orderRoutes";
+import routerQR from "./routes/qrRoutes";
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use("/api/product-size", routerProductSize);
 app.use("/api/cart", routerCart);
 app.use("/api/cart-items", routerCartItem);
 app.use("/api", orderRoutes);
+app.use("/api/qrcode", routerQR);
 
 
 // Health check

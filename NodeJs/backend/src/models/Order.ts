@@ -12,6 +12,7 @@ interface OrderAttributes {
   shippingAddress: string;
   phoneNumber: string;
   notes?: string;
+  qrCode?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -35,6 +36,7 @@ class Order
   public shippingAddress!: string;
   public phoneNumber!: string;
   public notes?: string;
+  public qrCode?: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -83,6 +85,10 @@ Order.init(
       },
     },
     notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    qrCode: {
       type: DataTypes.TEXT,
       allowNull: true,
     },

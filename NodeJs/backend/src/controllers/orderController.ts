@@ -5,6 +5,8 @@ import CartItem from "../models/CartItem";
 import ProductSize from "../models/ProductSize";
 import Product from "../models/Product";
 import sequelize from "../config/database";
+import { genQr, generateReconciliationCode } from "../api/bank.api";
+import crypto from "crypto";
 
 class OrderController {
   static async createOrder(req: Request, res: Response): Promise<void> {
@@ -100,6 +102,27 @@ class OrderController {
 
       await transaction.commit();
 
+      // Tạo QR code sau khi tạo order thành công
+      try {
+        const reconciliationCode = generateReconciliationCode();
+        const addInfo = `${reconciliationCode}277198${order.id}`;
+        
+        const qrResult = await genQr({
+          accountNo: '0365277198',
+          accountName: 'TRAN DUC DUY',
+          acqId: 970422,
+          amount: order.totalAmount,
+          addInfo: addInfo as "string",
+          format: "text",
+          template: "compact"
+        });
+        
+        // Lưu QR code vào database
+        await order.update({ qrCode: qrResult.data.qrCode });
+      } catch (qrError) {
+        console.error("Lỗi tạo QR code:", qrError);
+      }
+
       res.status(201).json({
         message: "Tạo đơn hàng thành công",
         order: {
@@ -167,6 +190,38 @@ class OrderController {
       res.json({ order });
     } catch (error) {
       console.error("Lỗi lấy order:", error);
+      res.status(500).json({ message: "Lỗi server" });
+    }
+  }
+
+  static async getOrderQRCode(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const userId = (req as any).user.id;
+
+      const order = await Order.findOne({
+        where: { id, userId },
+        attributes: ['id', 'qrCode', 'totalAmount', 'status']
+      });
+      
+      if (!order) {
+        res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+        return;
+      }
+
+      if (!order.qrCode) {
+        res.status(400).json({ message: "QR code chưa được tạo cho đơn hàng này" });
+        return;
+      }
+
+      res.json({ 
+        qrCode: order.qrCode,
+        orderId: order.id,
+        totalAmount: order.totalAmount,
+        status: order.status
+      });
+    } catch (error) {
+      console.error("Lỗi lấy QR code:", error);
       res.status(500).json({ message: "Lỗi server" });
     }
   }
